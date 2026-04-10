@@ -1,7 +1,36 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Billing, MeterReading } from '@/features/billings/type';
+import { getBillings } from '@/supabase/bills';
+import { getLatestMeterReading, getMeterReadings } from '@/supabase/readings';
+import { getCurrentUser } from '@/supabase/user';
 import { FileText } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
+  const [readings, setReadings] = useState<MeterReading[]>([]);
+  const [billings, setBillings] = useState<Billing[]>([]);
+  
+  useEffect(() => {
+    const fetchReadings = async () => {
+      const currentUser = await getCurrentUser();
+      console.log(currentUser);
+      const readings = await getMeterReadings(currentUser.consumer_id) as MeterReading[];
+      setReadings(readings);
+    }
+    const fetchBillings = async () => {
+      const currentUser = await getCurrentUser();
+      const billing = await getBillings(currentUser.consumer_id) as Billing[];
+      setBillings(billing);
+    }
+    fetchReadings();
+    fetchBillings();
+    console.log(billings)
+    console.log(readings)
+  }, []);
+  console.log(billings)
+  console.log(readings)
   return (
     <div className="space-y-6">
       {/* Statement of Account */}
@@ -30,26 +59,32 @@ export default function HomePage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">From:</span>
-              <span className="text-muted-foreground">08-02-2025</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">To:</span>
-              <span className="text-muted-foreground">09-02-2025</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">Prev:</span>
-              <span className="text-muted-foreground">991</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">Curr:</span>
-              <span className="text-muted-foreground">998</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="font-medium text-foreground">Usage:</span>
-              <span className="text-muted-foreground">8</span>
-            </div>
+            {readings.map((reading) => (
+              <>
+                <div key={reading.id} className="flex flex-col justify-between py-2 border-b border-border">
+                  <span className="font-medium text-foreground">From:</span>
+                  <span className="text-muted-foreground">{new Date(reading.reading_from).toLocaleDateString()}</span>
+                </div>
+
+                <div className="flex justify-between py-2 border-b border-border">
+                  <span className="font-medium text-foreground">To:</span>
+                  <span className="text-muted-foreground">{new Date(reading.reading_to).toLocaleDateString()}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-border">
+                  <span className="font-medium text-foreground">Previous Reading:</span>
+                  <span className="text-muted-foreground">{reading.previous_reading}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-border">
+                  <span className="font-medium text-foreground">Current Reading:</span>
+                  <span className="text-muted-foreground">{reading.current_reading}</span>
+                </div>
+                <div className="flex justify-between py-2">
+                  <span className="font-medium text-foreground">Usage:</span>
+                  <span className="text-muted-foreground">{reading.usage}</span>
+                </div>
+            </>
+            ))}
+            
           </CardContent>
         </Card>
 
@@ -60,14 +95,18 @@ export default function HomePage() {
               <CardTitle className="text-base">Due Dates</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex justify-between py-2 border-b border-border">
-                <span className="font-medium text-foreground">Due Date:</span>
-                <span className="text-muted-foreground">08-02-2025</span>
-              </div>
-              <div className="flex justify-between py-2">
-                <span className="font-medium text-foreground">Disconnection:</span>
-                <span className="text-muted-foreground">09-02-2025</span>
-              </div>
+              {billings.map((billing) => (
+                <>
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <span className="font-medium text-foreground">Due Date:</span>
+                    <span className="text-muted-foreground">{new Date(billing.due_date).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="font-medium text-foreground">Disconnection:</span>
+                    <span className="text-muted-foreground">{new Date(billing.disconnection_date).toLocaleDateString()}</span>
+                  </div>
+                </>
+              ))}
             </CardContent>
           </Card>
 
@@ -78,7 +117,7 @@ export default function HomePage() {
                   <FileText className="h-5 w-5 text-primary" />
                   <span className="font-medium">Total Amount Due:</span>
                 </div>
-                <span className="text-2xl font-bold text-primary">230.50</span>
+                <span className="text-2xl font-bold text-primary">{billings.reduce((acc, billing) => acc + billing.charges, 0)}</span>
               </div>
             </CardContent>
           </Card>
