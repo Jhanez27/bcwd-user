@@ -36,7 +36,6 @@ export const verifyAccountDetails = async (data: SignUpFormValues) => {
 }
 
 export const createConsumerAccount = async (username: string, password: string, consumerId: number) => {
-    // 1. Create the Auth account
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email: username,
         password: password,
@@ -69,5 +68,18 @@ export const createConsumerAccount = async (username: string, password: string, 
 
     if (updateError) throw updateError;
 
+    await supabase.auth.signOut();
+
     return authData;
+}
+
+export const loginConsumer = async (username: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: username,
+        password: password,
+    });
+
+    if (error) throw error;
+
+    return data;
 }
