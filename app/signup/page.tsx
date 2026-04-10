@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { signupSchema } from '@/features/authentication/utils/signupSchema';
+import { createConsumerAccount, verifyAccountDetails } from '@/supabase/consumer';
+import { toast } from 'sonner';
+import { Consumer, MeterSize } from '@/features/authentication/types';
+import { getMeterSizes } from '@/supabase/meter';
 
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -23,7 +27,23 @@ export default function SignupPage() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [consumer, setConsumer] = useState<Consumer | null>(null);
+  const [meterSizes, setMeterSizes] = useState<MeterSize[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchMeterSizes = async () => {
+      try {
+        const meterSizes = await getMeterSizes();
+        setMeterSizes(meterSizes);
+        console.log(meterSizes);
+      } catch (error) {
+        console.log(error);
+        toast.error('Failed to fetch meter sizes');
+      }
+    };
+    fetchMeterSizes();
+  }, []);
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -40,11 +60,16 @@ export default function SignupPage() {
 
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log('Form data:', data);
-    setIsLoading(false);
-    setIsSuccess(true);
+    try {
+      await createConsumerAccount(data.username, data.password, consumer!.id);
+      console.log(consumer);
+      setIsLoading(false);
+      setIsSuccess(true);
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to create account');
+      setIsLoading(false);
+    }
   };
 
   const nextStep = async () => {
@@ -53,9 +78,21 @@ export default function SignupPage() {
       : [];
     
     // Validate current step fields
-    const isValid = await form.trigger(fields as any);
-    if (isValid) setStep(2);
+    try {
+      const consumer = await verifyAccountDetails(form.getValues());
+      setStep(2);
+      setConsumer(consumer);
+      toast.success('Account details verified');
+    } catch (error) {
+      console.log(error);
+      toast.error('Invalid account details');
+    }
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await onSubmit(form.getValues());
+  }
 
   const prevStep = () => setStep(1);
 
@@ -137,7 +174,7 @@ export default function SignupPage() {
             </p>
           </div>
 
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {step === 1 ? (
               <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="grid grid-cols-2 gap-4">
@@ -162,18 +199,7 @@ export default function SignupPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="meterBrand">Meter Brand</Label>
-                    <Select onValueChange={(v) => form.setValue('meterBrand', v)}>
-                      <SelectTrigger className="h-11 bg-muted/50 border-none px-4">
-                        <SelectValue placeholder="Select Brand" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="itron">Itron</SelectItem>
-                        <SelectItem value="elster">Elster</SelectItem>
-                        <SelectItem value="sensus">Sensus</SelectItem>
-                        <SelectItem value="zenner">Zenner</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input id="meterBrand" placeholder="Enter Meter Brand" {...form.register('meterBrand')} className="h-11 bg-muted/50 border-none px-4" />
                     {form.formState.errors.meterBrand && <p className="text-xs text-destructive">{form.formState.errors.meterBrand.message}</p>}
                   </div>
                   <div className="space-y-2">
@@ -183,11 +209,11 @@ export default function SignupPage() {
                         <SelectValue placeholder="Select Size" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="half">1/2"</SelectItem>
-                        <SelectItem value="three-fourth">3/4"</SelectItem>
-                        <SelectItem value="one">1"</SelectItem>
-                        <SelectItem value="one-half">1 1/2"</SelectItem>
-                        <SelectItem value="two">2"</SelectItem>
+                        {meterSizes.map((meterSize) => (
+                          <SelectItem key={meterSize.id} value={meterSize.size_inch}>
+                            {meterSize.size_inch}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {form.formState.errors.meterSize && <p className="text-xs text-destructive">{form.formState.errors.meterSize.message}</p>}
@@ -217,11 +243,11 @@ export default function SignupPage() {
                   <div className="grid grid-cols-2 gap-y-4 text-sm">
                     <div>
                       <p className="text-muted-foreground">Full Name</p>
-                      <p className="font-bold">{form.getValues('firstName')} {form.getValues('lastName')}</p>
+                      <p className="font-bold">{consumer?.first_name} {consumer?.last_name}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Account Number</p>
-                      <p className="font-bold">{form.getValues('accountNumber')}</p>
+                      <p className="font-bold">{consumer?.account_number}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Meter Details</p>
