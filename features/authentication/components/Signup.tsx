@@ -154,6 +154,12 @@ export function Signup() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" placeholder="Enter your email" {...form.register("email")} className="h-11 bg-muted/50 border-none px-4" />
+                  {form.formState.errors.email && <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>}
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <Input id="password" type="password" placeholder="Create a password" {...form.register("password")} className="h-11 bg-muted/50 border-none px-4" />
                   {form.formState.errors.password && <p className="text-xs text-destructive">{form.formState.errors.password.message}</p>}

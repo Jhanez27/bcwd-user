@@ -1,91 +1,148 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+"use client";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { MapPin, Phone, User, Pencil } from "lucide-react";
+import { useProfileActions } from "../hooks/useProfileAction";
+import { EditProfileDialog } from "./EditProfileDialog";
 
 export function Profile() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { form, onSubmit, loading } = useProfileActions();
+
+  const firstName = form.watch("first_name");
+  const lastName = form.watch("last_name");
+  const username = form.watch("username");
+  const address = form.watch("address");
+  const phone = form.watch("phone");
+  const municipalZone = form.watch("municipal_zone");
+  const zoneNumber = form.watch("zone_number");
+
+  const initials =
+    firstName && lastName
+      ? `${firstName[0]}${lastName[0]}`.toUpperCase()
+      : "??";
+
   return (
     <div className="space-y-6">
+      {/* Edit Dialog */}
+      <EditProfileDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        form={form}
+        onSubmit={onSubmit}
+      />
+
       {/* Profile Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-6">
-          <Avatar className="h-24 w-24">
-            <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="User" />
-            <AvatarFallback>RS</AvatarFallback>
+          <Avatar className="h-24 w-24 text-2xl font-bold ring-4 ring-primary/20">
+            <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
+              {loading ? "..." : initials}
+            </AvatarFallback>
           </Avatar>
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Rigen Suringa</h1>
-            <p className="text-muted-foreground">@RigenSuringaXJulian</p>
+          <div className="space-y-1">
+            {loading ? (
+              <>
+                <Skeleton className="h-8 w-48" />
+                <Skeleton className="h-4 w-32" />
+              </>
+            ) : (
+              <>
+                <h1 className="text-3xl font-bold text-foreground">
+                  {firstName} {lastName}
+                </h1>
+                <p className="text-muted-foreground">@{username}</p>
+              </>
+            )}
           </div>
         </div>
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+        <Button
+          onClick={() => setDialogOpen(true)}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+        >
+          <Pencil className="h-4 w-4" />
           Edit Profile
         </Button>
       </div>
 
-      {/* User Details */}
-      <Card className="border-border">
-        <CardHeader>
-          <CardTitle className="text-xl">User Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground font-medium">Username</p>
-              <p className="text-foreground font-semibold">RigenSuringaXJulian</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground font-medium">Location</p>
-              <p className="text-foreground font-semibold">Baybay</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Additional Profile Sections */}
+      {/* Details Grid */}
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Account Information */}
+        {/* Account Info */}
         <Card className="border-border">
-          <CardHeader>
-            <CardTitle className="text-base">Account Information</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <User className="h-4 w-4 text-primary" />
+              Account Information
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium">Email</p>
-              <p className="text-sm text-foreground">user@baybay.gov.ph</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium">Phone Number</p>
-              <p className="text-sm text-foreground">+63 917 535 8130</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium">Member Since</p>
-              <p className="text-sm text-foreground">January 2, 2024</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Username</p>
+              {loading ? (
+                <Skeleton className="h-5 w-36" />
+              ) : (
+                <p className="text-sm font-semibold text-foreground">@{username || "—"}</p>
+              )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Preferences */}
+        {/* Contact Info */}
         <Card className="border-border">
-          <CardHeader>
-            <CardTitle className="text-base">Preferences</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Phone className="h-4 w-4 text-primary" />
+              Contact
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-foreground">Email Notifications</span>
-              <div className="w-12 h-6 bg-primary rounded-full relative cursor-pointer">
-                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" />
-              </div>
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Phone Number</p>
+              {loading ? (
+                <Skeleton className="h-5 w-40" />
+              ) : (
+                <p className="text-sm font-semibold text-foreground">{phone || "—"}</p>
+              )}
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-foreground">SMS Notifications</span>
-              <div className="w-12 h-6 bg-muted rounded-full relative cursor-pointer">
-                <div className="absolute left-1 top-1 w-4 h-4 bg-muted-foreground rounded-full" />
+          </CardContent>
+        </Card>
+
+        {/* Location */}
+        <Card className="border-border md:col-span-2">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-primary" />
+              Location
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Address</p>
+                {loading ? (
+                  <Skeleton className="h-5 w-40" />
+                ) : (
+                  <p className="text-sm font-semibold text-foreground">{address || "—"}</p>
+                )}
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-foreground">Payment Reminders</span>
-              <div className="w-12 h-6 bg-primary rounded-full relative cursor-pointer">
-                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" />
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Municipal Zone</p>
+                {loading ? (
+                  <Skeleton className="h-5 w-28" />
+                ) : (
+                  <p className="text-sm font-semibold text-foreground">{municipalZone || "—"}</p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Zone Number</p>
+                {loading ? (
+                  <Skeleton className="h-5 w-20" />
+                ) : (
+                  <p className="text-sm font-semibold text-foreground">{zoneNumber || "—"}</p>
+                )}
               </div>
             </div>
           </CardContent>
