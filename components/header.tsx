@@ -10,8 +10,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
 
 export function Header() {
+  const router = useRouter();
+  const supabase = createClient();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+  }
   return (
     <header className="fixed right-0 top-0 left-48 border-b border-border bg-background p-4 flex items-center justify-between">
       <div className="flex-1" />
@@ -45,7 +53,7 @@ export function Header() {
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
               Logout
             </DropdownMenuItem>

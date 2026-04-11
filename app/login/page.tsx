@@ -1,9 +1,29 @@
+"use client"
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { loginConsumer } from '@/supabase/consumer';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try{
+      await loginConsumer(username, password)
+      console.log("done");
+      router.push('/dashboard');
+    }catch(error){
+      console.log(error)
+    }
+    
+  }
   return (
     <div className="grid grid-cols-2 min-h-screen">
       {/* Left side - Water imagery */}
@@ -47,13 +67,15 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-foreground">Login Account</h1>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">Username</label>
               <Input
                 type="text"
                 placeholder="Enter your Username"
                 className="h-10"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
@@ -63,10 +85,12 @@ export default function LoginPage() {
                 type="password"
                 placeholder="Enter your Password"
                 className="h-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-10">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-10">
               Login as Costumer
             </Button>
           </form>
