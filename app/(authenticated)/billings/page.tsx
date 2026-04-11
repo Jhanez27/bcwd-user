@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useBills } from '@/features/billings/hooks/useBills';
-import { Pagination } from '@/components/shared/Paganation';
+import { CustomPagination } from '@/components/shared/CustomPagination';
 import { getStatusColor } from '@/features/billings/utils/statusColor';
 
 export default function BillingsPage() {
@@ -45,7 +45,7 @@ export default function BillingsPage() {
       </div>
 
       <div className="flex justify-end">
-          <Pagination
+          <CustomPagination
             currentPage={currentPage}
             totalPages={totalPages}
             totalItems={totalItems}

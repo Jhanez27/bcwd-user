@@ -1,3 +1,5 @@
+"use client"
+import { CustomPagination } from '@/components/shared/CustomPagination';
 import {
   Table,
   TableBody,
@@ -6,23 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import { usePayment } from '@/features/payments/hooks/usePayment';
 
-const paymentHistory = [
-  { date: '07-12-2025', amount: 'P 192.50' },
-  { date: '07-12-2025', amount: 'P 192.50' },
-  { date: '07-12-2025', amount: 'P 192.50' },
-];
 
 export default function PaymentHistoryPage() {
+  const { payments, currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, handlePageChange } = usePayment();
   return (
     <div className="space-y-6">
       <div>
@@ -38,10 +28,10 @@ export default function PaymentHistoryPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paymentHistory.map((payment, index) => (
+            {payments.map((payment, index) => (
               <TableRow key={index} className="border-b border-border hover:bg-muted/50">
-                <TableCell className="text-foreground">{payment.date}</TableCell>
-                <TableCell className="text-foreground">{payment.amount}</TableCell>
+                <TableCell className="text-foreground">{new Date(payment.paid_at).toLocaleDateString()}</TableCell>
+                <TableCell className="text-foreground">{payment.billing.charges}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -49,33 +39,13 @@ export default function PaymentHistoryPage() {
       </div>
 
       <div className="flex justify-end">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                1
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">10</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

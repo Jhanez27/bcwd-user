@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
-interface PaginationProps {
+interface CustomPaginationProps {
   currentPage: number
   totalPages: number
   totalItems: number
@@ -12,14 +12,14 @@ interface PaginationProps {
   hasNextPage?: boolean
 }
 
-export function Pagination({
+export function CustomPagination({
   currentPage,
   totalPages,
   totalItems,
   itemsPerPage,
   onPageChange,
   hasNextPage,
-}: PaginationProps) {
+}: CustomPaginationProps) {
   if (totalPages <= 1) return null
 
   const from = (currentPage - 1) * itemsPerPage + 1
