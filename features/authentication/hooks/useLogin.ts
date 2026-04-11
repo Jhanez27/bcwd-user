@@ -12,14 +12,14 @@ export function useLogin() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      await loginConsumer(data.username, data.password);
+      await loginConsumer(data.email, data.password);
       toast.success("Login Successful");
       router.push("/dashboard");
     } catch {

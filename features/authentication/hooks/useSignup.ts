@@ -40,6 +40,7 @@ export function useSignup() {
       accountNumber: "",
       meterBrand: "",
       meterSize: "",
+      email: "",
       username: "",
       password: "",
     },
@@ -48,7 +49,7 @@ export function useSignup() {
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
     try {
-      await createConsumerAccount(data.username, data.password, consumer!.id);
+      await createConsumerAccount(data.email, data.password, consumer!.id, data.username);
       setIsSuccess(true);
     } catch {
       toast.error("Failed to create account");

@@ -48,15 +48,15 @@ export function Login() {
 
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Username</label>
+              <label className="text-sm font-medium text-foreground">Email</label>
               <Input
                 type="text"
-                placeholder="Enter your Username"
+                placeholder="Enter your Email"
                 className="h-10"
-                {...form.register("username")}
+                {...form.register("email")}
               />
-              {form.formState.errors.username && (
-                <p className="text-sm text-red-500">{form.formState.errors.username.message}</p>
+              {form.formState.errors.email && (
+                <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
               )}
             </div>
 
