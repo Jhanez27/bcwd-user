@@ -27,7 +27,20 @@ export const getMeterReadings = async (userId: string) => {
         .eq('meter.consumer_id', userId)
         .order('added_at', { ascending: false });
     if (error) throw error;
-    console.log(data);
-    console.log(userId)
     return data;
 }
+
+export const getPaginatedMeterReadings = async (userId: string, page: number, limit: number) => {
+    const { data, error } = await supabase
+        .from('meter_reading')
+        .select(`
+            *,
+            meter!inner(consumer_id)
+        `)
+        .eq('meter.consumer_id', userId)
+        .order('added_at', { ascending: false })
+        .range((page - 1) * limit, page * limit - 1);
+    if (error) throw error;
+    return data;
+}
+

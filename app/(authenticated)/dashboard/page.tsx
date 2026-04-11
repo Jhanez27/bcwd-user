@@ -1,36 +1,11 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Billing, MeterReading } from '@/features/billings/type';
-import { getBillings } from '@/supabase/bills';
-import { getLatestMeterReading, getMeterReadings } from '@/supabase/readings';
-import { getCurrentUser } from '@/supabase/user';
 import { FileText } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 
 export default function HomePage() {
-  const [readings, setReadings] = useState<MeterReading[]>([]);
-  const [billings, setBillings] = useState<Billing[]>([]);
-  
-  useEffect(() => {
-    const fetchReadings = async () => {
-      const currentUser = await getCurrentUser();
-      console.log(currentUser);
-      const readings = await getMeterReadings(currentUser.consumer_id) as MeterReading[];
-      setReadings(readings);
-    }
-    const fetchBillings = async () => {
-      const currentUser = await getCurrentUser();
-      const billing = await getBillings(currentUser.consumer_id) as Billing[];
-      setBillings(billing);
-    }
-    fetchReadings();
-    fetchBillings();
-    console.log(billings)
-    console.log(readings)
-  }, []);
-  console.log(billings)
-  console.log(readings)
+  const { readings, billings } = useDashboard();
   return (
     <div className="space-y-6">
       {/* Statement of Account */}
