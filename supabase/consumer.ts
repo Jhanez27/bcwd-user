@@ -4,6 +4,22 @@ import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
+export const getCurrentConsumer = async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) throw error;
+    const { data: consumer, error: consumerError } = await supabase
+        .from('consumer')
+        .select(`
+            *,
+            meter!inner(brand, size)
+        `)
+        .eq('consumer_uuid', user?.id)
+        .maybeSingle();
+    if (consumerError) throw consumerError;
+    console.log(consumer);
+    return consumer;
+}
+
 export const verifyAccountDetails = async (data: SignUpFormValues) => {
     try {
         console.log(data);
@@ -35,13 +51,14 @@ export const verifyAccountDetails = async (data: SignUpFormValues) => {
     }
 }
 
-export const createConsumerAccount = async (username: string, password: string, consumerId: number) => {
+export const createConsumerAccount = async (email: string, password: string, consumerId: number, username: string) => {
     const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: username,
+        email: email,
         password: password,
         options: {
             data: {
                 consumer_id: consumerId,
+                username: username,
             }
         }
     });
@@ -73,9 +90,9 @@ export const createConsumerAccount = async (username: string, password: string, 
     return authData;
 }
 
-export const loginConsumer = async (username: string, password: string) => {
+export const loginConsumer = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({
-        email: username,
+        email: email,
         password: password,
     });
 

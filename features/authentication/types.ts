@@ -16,6 +16,7 @@ export type Consumer = {
     book_number: string;
     status: string;
     created_at: Date;
+    username: string;
     code: string;
     consumer_uid: string;
 }
