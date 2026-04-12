@@ -10,9 +10,12 @@ import {
 import { useBills } from '@/features/billings/hooks/useBills';
 import { CustomPagination } from '@/components/shared/CustomPagination';
 import { getStatusColor } from '@/features/billings/utils/statusColor';
+import { Button } from '@/components/ui/button';
+import { useBillAction } from '@/features/billings/hooks/useBillAction';
 
 export function Billings() {
   const { billings, currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, handlePageChange } = useBills();
+  const { handlePay } = useBillAction();
 
   return (
     <div className="space-y-6">
@@ -27,6 +30,7 @@ export function Billings() {
               <TableHead className="text-foreground font-semibold">Due Date</TableHead>
               <TableHead className="text-foreground font-semibold">Amount</TableHead>
               <TableHead className="text-foreground font-semibold">Status</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -38,6 +42,11 @@ export function Billings() {
                   <span className={`text-sm font-medium ${getStatusColor(bill.status)}`}>
                     {bill.status}
                   </span>
+                </TableCell>
+                <TableCell>
+                  <Button variant="outline" size="sm" onClick={() => handlePay(bill.id)}>
+                    Pay
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
