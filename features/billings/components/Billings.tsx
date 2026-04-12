@@ -17,7 +17,6 @@ import { Loader2 } from 'lucide-react';
 export function Billings() {
   const { billings, currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, handlePageChange } = useBills();
   const { handlePay, isPaying } = useBillAction();
-
   return (
     <div className="space-y-6">
       <div>
@@ -45,21 +44,25 @@ export function Billings() {
                   </span>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePay(bill)}
-                    disabled={isPaying || bill.status === 'paid'}
-                  >
-                    {isPaying ? (
-                      <>
-                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                        Processing…
-                      </>
-                    ) : (
-                      'Pay via GCash'
-                    )}
-                  </Button>
+                  {bill.status !== 'Paid' ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePay(bill)}
+                      disabled={isPaying || bill.status === 'paid'}
+                    >
+                      {isPaying ? (
+                        <>
+                          <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                          Processing…
+                        </>
+                      ) : (
+                        'Pay via GCash'
+                      )}
+                    </Button>
+                  ) : (
+                    <span className="text-sm font-medium text-muted-foreground">No Action</span>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

@@ -26,7 +26,7 @@ export function Dashboard() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
-                Readings
+                Latest Reading
               </CardTitle>
             </div>
           </CardHeader>
@@ -61,7 +61,7 @@ export function Dashboard() {
         <div className="space-y-4">
           <Card className="border-border">
             <CardHeader className="pb-4">
-              <CardTitle className="text-base">Due Dates</CardTitle>
+              <CardTitle className="text-base">Latest Billing Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between py-2 border-b border-border">
