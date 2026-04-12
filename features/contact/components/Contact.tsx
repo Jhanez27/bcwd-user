@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { MapPin, Phone, Mail, Clock, Facebook } from "lucide-react";
+import {
+  CircleCheck,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Facebook,
+} from "lucide-react";
 import { Logo } from "@/components/logo";
 
 function AlertCircleIcon({ className }: { className: string }) {
@@ -45,7 +52,7 @@ export function Contact() {
           <div className="text-white space-y-8">
             <div>
               <div className="flex items-center gap-3 mb-4 text-white/80">
-                <AlertCircleIcon className="h-5 w-5" />
+                <CircleCheck className="h-5 w-5" />
                 <span className="text-sm">
                   Your reliable way to stay on top of your water bills.
                 </span>
