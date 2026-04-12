@@ -4,124 +4,258 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.98 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+
+  /* ============================================================
+   BCWD BILLING SYSTEM — DESIGN TOKENS
+   Color space: OKLCH for perceptual uniformity across hues.
+   Think of OKLCH like HSL but where L=50 actually *looks*
+   equally bright regardless of hue — no more "green looks
+   brighter than blue at the same L value" problem.
+   ============================================================ */
+
+  /* --- Base surfaces --- */
+  --background: oklch(0.98 0 0);          
+  --foreground:  oklch(0.16 0 0);           
+ 
+  --card: oklch(1 0 0);              
+  --card-foreground: oklch(0.13 0 0);
+ 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.42 0.15 265);
+  --popover-foreground: oklch(0.13 0 0);
+
+  /* --- Primary — Slate Blue (trustworthy, institutional) --- */
+  --primary: oklch(0.42 0.15 265);      
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.70 0.12 265);
-  --secondary-foreground: oklch(0.145 0 0);
+ 
+  /* --- Secondary — lighter blue, for supporting actions --- */
+  --secondary: oklch(0.94 0.03 265);     
+  --secondary-foreground: oklch(0.30 0 0);
+
+  /* --- Muted — neutral gray for bg chips, disabled, subtle areas --- */
   --muted: oklch(0.93 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: oklch(0.50 0 0);
+
+  /* --- Accent — mid-range blue for hover highlights, tags --- */
   --accent: oklch(0.72 0.14 265);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+ 
+  /* --- Destructive --- */
+  --destructive: oklch(0.55 0.22 27);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.98 0 0);
+ 
+  /* --- Chrome --- */
+  --border: oklch(0.90 0 0);
+  --input: oklch(0.97 0 0);
   --ring: oklch(0.42 0.15 265);
-  --chart-1: oklch(0.42 0.15 265);
-  --chart-2: oklch(0.70 0.12 265);
-  --chart-3: oklch(0.72 0.14 265);
-  --chart-4: oklch(0.52 0.14 265);
-  --chart-5: oklch(0.82 0.10 265);
+
+  /* --- Radius --- */
   --radius: 0.625rem;
+ 
+  /* --- Sidebar (light) --- */
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-foreground: oklch(0.16 0 0);
   --sidebar-primary: oklch(0.42 0.15 265);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.70 0.12 265);
-  --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.93 0 0);
+  --sidebar-primary-foreground: oklch(0.16 0 0);
+  --sidebar-accent: oklch(0.94 0.03 265);
+  --sidebar-accent-foreground: oklch(0.30 0 0);
+  --sidebar-border: oklch(0.90 0 0);
   --sidebar-ring: oklch(0.42 0.15 265);
-  --status-paid: oklch(0.52 0.12 165);
-  --status-unpaid: oklch(0.72 0.14 265);
-  --status-overdue: oklch(0.65 0.19 27.325);
+
+   /* Sidebar nav item states */
+  --sidebar-nav-item:              oklch(0.985 0 0);             /* default text */
+  --sidebar-nav-item-muted:        oklch(0.90 0 0);           /* dimmed items */
+  --sidebar-nav-item-active:       oklch(0.985 0 0);            /* active text — bold+underline treatment */
+  --sidebar-nav-item-active-bg:    transparent;               /* light theme: no bg, just underline */
+  --sidebar-nav-item-hover-bg:     transparent;    
+  --sidebar-nav-item-hover:        oklch(0.985 0 0);             /* on hover, text turns dark and bg lightens */  
+  --sidebar-nav-item-active-indicator: oklch(0.985 0 0);  
+
+
+  /* -------------------------------------------------------
+     STATUS TOKENS — billing-specific semantic color system
+     Each status has 3 slots: bg (surface), DEFAULT (text/icon), border
+     Naming: --status-{state}-{slot}
+     Usage: badge bg → bg-status-paid-bg, text → text-status-paid, border → border-status-paid-border
+     ------------------------------------------------------- */
+ 
+  /* Paid / Success */
+  --status-paid:            oklch(0.50 0.13 155);   /* green — text/icon */
+  --status-paid-bg:         oklch(0.96 0.04 155);   /* light green surface */
+  --status-paid-border:     oklch(0.85 0.08 155);   /* green border */
+
+  /* Unpaid / Neutral */
+  --status-unpaid:          oklch(0.45 0 0);         /* gray — text/icon */
+  --status-unpaid-bg:       oklch(0.93 0 0);         /* light gray surface */
+  --status-unpaid-border:   oklch(0.82 0 0);         /* gray border */
+ 
+  /* Overdue / Danger */
+  --status-overdue:         oklch(0.55 0.22 27);     /* red — text/icon */
+  --status-overdue-bg:      oklch(0.96 0.04 27);     /* light red surface */
+  --status-overdue-border:  oklch(0.85 0.10 27);     /* red border */
+ 
+  /* Due Soon / Warning */
+  --status-warning:         oklch(0.58 0.16 65);     /* amber — text/icon */
+  --status-warning-bg:      oklch(0.97 0.04 90);     /* light amber surface */
+  --status-warning-border:  oklch(0.85 0.09 75);     /* amber border */
+ 
+  /* Informational */
+  --status-info:            oklch(0.52 0.15 240);    /* blue — text/icon */
+  --status-info-bg:         oklch(0.95 0.04 240);    /* light blue surface */
+  --status-info-border:     oklch(0.83 0.08 240);    /* blue border */
+
+    /* --- Chart Colors --- */
+  --chart-1: oklch(0.42 0.15 265);
+  --chart-2: oklch(0.60 0.14 265);
+  --chart-3: oklch(0.50 0.13 155);   /* green — pairs with paid status */
+  --chart-4: oklch(0.55 0.22 27);    /* red — pairs with overdue status */
+  --chart-5: oklch(0.58 0.16 65);    /* amber — pairs with warning status */
+ 
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.16 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.72 0.14 265);
-  --primary-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.70 0.12 265);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.30 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.72 0.14 265);
-  --accent-foreground: oklch(0.145 0 0);
-  --destructive: oklch(0.65 0.19 27.325);
+  /* --- Base surfaces --- */
+  --background:          oklch(0.13 0 0);
+  --foreground:          oklch(0.97 0 0);
+ 
+  --card:                oklch(0.17 0 0);
+  --card-foreground:     oklch(0.97 0 0);
+ 
+  --popover:             oklch(0.17 0 0);
+  --popover-foreground:  oklch(0.97 0 0);
+ 
+  /* --- Primary — lighter in dark mode so it pops on dark bg --- */
+  --primary:             oklch(0.72 0.14 265);
+  --primary-foreground:  oklch(0.13 0 0);
+ 
+  /* --- Secondary --- */
+  --secondary:           oklch(0.25 0.04 265);      /* dark blue-tinted chip bg */
+  --secondary-foreground: oklch(0.90 0 0);
+ 
+  /* --- Muted --- */
+  --muted:               oklch(0.26 0 0);
+  --muted-foreground:    oklch(0.65 0 0);
+ 
+  /* --- Accent --- */
+  --accent:              oklch(0.35 0.08 265);
+  --accent-foreground:   oklch(0.97 0 0);
+ 
+  /* --- Destructive --- */
+  --destructive:         oklch(0.65 0.19 27);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.27 0 0);
-  --input: oklch(0.22 0 0);
-  --ring: oklch(0.72 0.14 265);
+ 
+  /* --- Chrome --- */
+  --border:              oklch(0.28 0 0);
+  --input:               oklch(0.22 0 0);
+  --ring:                oklch(0.72 0.14 265);
+ 
+  /* --- Sidebar (dark) — FIXED: was incorrectly using light values --- */
+  --sidebar:                    oklch(0.17 0 0);
+  --sidebar-foreground:         oklch(0.90 0 0);
+  --sidebar-primary:            oklch(0.72 0.14 265);
+  --sidebar-primary-foreground: oklch(0.13 0 0);
+  --sidebar-accent:             oklch(0.25 0.04 265);
+  --sidebar-accent-foreground:  oklch(0.90 0 0);
+  --sidebar-border:             oklch(0.25 0 0);
+  --sidebar-ring:               oklch(0.72 0.14 265);
+ 
+  /* --- Status (dark variants — reduced chroma surfaces, brighter text) --- */
+ 
+  --status-paid:            oklch(0.62 0.14 155);
+  --status-paid-bg:         oklch(0.22 0.05 155);
+  --status-paid-border:     oklch(0.32 0.08 155);
+ 
+  --status-unpaid:          oklch(0.65 0 0);
+  --status-unpaid-bg:       oklch(0.22 0 0);
+  --status-unpaid-border:   oklch(0.30 0 0);
+ 
+  --status-overdue:         oklch(0.70 0.18 27);
+  --status-overdue-bg:      oklch(0.22 0.05 27);
+  --status-overdue-border:  oklch(0.35 0.10 27);
+ 
+  --status-warning:         oklch(0.72 0.14 75);
+  --status-warning-bg:      oklch(0.22 0.04 75);
+  --status-warning-border:  oklch(0.35 0.08 75);
+ 
+  --status-info:            oklch(0.68 0.14 240);
+  --status-info-bg:         oklch(0.22 0.05 240);
+  --status-info-border:     oklch(0.32 0.08 240);
+ 
+  /* --- Charts --- */
   --chart-1: oklch(0.72 0.14 265);
-  --chart-2: oklch(0.70 0.12 265);
-  --chart-3: oklch(0.42 0.15 265);
-  --chart-4: oklch(0.52 0.14 265);
-  --chart-5: oklch(0.82 0.10 265);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.42 0.15 265);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.70 0.12 265);
-  --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.93 0 0);
-  --sidebar-ring: oklch(0.42 0.15 265);
-  --status-paid: oklch(0.52 0.12 165);
-  --status-unpaid: oklch(0.72 0.14 265);
-  --status-overdue: oklch(0.65 0.19 27.325);
+  --chart-2: oklch(0.60 0.12 265);
+  --chart-3: oklch(0.62 0.14 155);
+  --chart-4: oklch(0.70 0.18 27);
+  --chart-5: oklch(0.72 0.14 75);
 }
 
 @theme inline {
   --font-sans: 'Geist', 'Geist Fallback';
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
+ 
+  /* Core */
+  --color-background:            var(--background);
+  --color-foreground:            var(--foreground);
+  --color-card:                  var(--card);
+  --color-card-foreground:       var(--card-foreground);
+  --color-popover:               var(--popover);
+  --color-popover-foreground:    var(--popover-foreground);
+  --color-primary:               var(--primary);
+  --color-primary-foreground:    var(--primary-foreground);
+  --color-secondary:             var(--secondary);
+  --color-secondary-foreground:  var(--secondary-foreground);
+  --color-muted:                 var(--muted);
+  --color-muted-foreground:      var(--muted-foreground);
+  --color-accent:                var(--accent);
+  --color-accent-foreground:     var(--accent-foreground);
+  --color-destructive:           var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-border:                var(--border);
+  --color-input:                 var(--input);
+  --color-ring:                  var(--ring);
+ 
+  /* Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+ 
+  /* Sidebar */
+  --sidebar:                    oklch(0.17 0 0);
+  --sidebar-foreground:         oklch(0.90 0 0);
+  --sidebar-primary:            oklch(0.72 0.14 265);
+  --sidebar-primary-foreground: oklch(0.13 0 0);
+  --sidebar-accent:             oklch(0.25 0.04 265);
+  --sidebar-accent-foreground:  oklch(0.90 0 0);
+  --sidebar-border:             oklch(0.25 0 0);
+  --sidebar-ring:               oklch(0.72 0.14 265);
+ 
+  /* Status — all 3 slots exposed as Tailwind utilities */
+  --color-status-paid:            var(--status-paid);
+  --color-status-paid-bg:         var(--status-paid-bg);
+  --color-status-paid-border:     var(--status-paid-border);
+ 
+  --color-status-unpaid:          var(--status-unpaid);
+  --color-status-unpaid-bg:       var(--status-unpaid-bg);
+  --color-status-unpaid-border:   var(--status-unpaid-border);
+ 
+  --color-status-overdue:         var(--status-overdue);
+  --color-status-overdue-bg:      var(--status-overdue-bg);
+  --color-status-overdue-border:  var(--status-overdue-border);
+ 
+  --color-status-warning:         var(--status-warning);
+  --color-status-warning-bg:      var(--status-warning-bg);
+  --color-status-warning-border:  var(--status-warning-border);
+ 
+  --color-status-info:            var(--status-info);
+  --color-status-info-bg:         var(--status-info-bg);
+  --color-status-info-border:     var(--status-info-border);
+ 
+  /* Charts */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-status-paid: var(--status-paid);
-  --color-status-unpaid: var(--status-unpaid);
-  --color-status-overdue: var(--status-overdue);
 }
 
 @layer base {
