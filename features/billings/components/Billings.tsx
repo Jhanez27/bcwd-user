@@ -1,84 +1,75 @@
 "use client";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+
+import { FileText } from 'lucide-react';
 import { useBills } from '@/features/billings/hooks/useBills';
-import { CustomPagination } from '@/components/shared/CustomPagination';
-import { getStatusColor } from '@/features/billings/utils/statusColor';
-import { Button } from '@/components/ui/button';
 import { useBillAction } from '@/features/billings/hooks/useBillAction';
-import { Loader2 } from 'lucide-react';
+import { CustomPagination } from '@/components/shared/CustomPagination';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { BillingSummaryCards } from './BillingSummaryCards';
+import { BillingTable } from './BillingTable';
 
 export function Billings() {
-  const { billings, currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, handlePageChange } = useBills();
+  const {
+    billings,
+    currentPage,
+    totalPages,
+    totalItems,
+    itemsPerPage,
+    handlePageChange,
+  } = useBills();
+
   const { handlePay, isPaying } = useBillAction();
+
+  const unpaidCount  = billings.filter((b) => b.status === 'Unpaid').length;
+  const overdueCount = billings.filter((b) => b.status === 'Overdue').length;
+  const totalDue     = billings
+    .filter((b) => b.status !== 'Paid')
+    .reduce((sum, b) => sum + b.charges, 0);
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Bills</h1>
-      </div>
+      <PageHeader
+        title="Billings"
+        description="Manage and track your water billing records"
+        badge={
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-xs text-muted-foreground font-medium whitespace-nowrap">
+            <FileText className="w-3.5 h-3.5" />
+            {totalItems} {totalItems === 1 ? 'record' : 'records'}
+          </div>
+        }
+      />
 
-      <div className="border border-border rounded-lg bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-b border-border hover:bg-transparent">
-              <TableHead className="text-foreground font-semibold">Due Date</TableHead>
-              <TableHead className="text-foreground font-semibold">Amount</TableHead>
-              <TableHead className="text-foreground font-semibold">Status</TableHead>
-              <TableHead className="text-foreground font-semibold">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {billings.map((bill, index) => (
-              <TableRow key={index} className="border-b border-border hover:bg-muted/50">
-                <TableCell className="text-foreground">{new Date(bill.due_date).toLocaleDateString()}</TableCell>
-                <TableCell className="text-foreground">{bill.charges}</TableCell>
-                <TableCell>
-                  <span className={`text-sm font-medium ${getStatusColor(bill.status)}`}>
-                    {bill.status}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  {bill.status !== 'Paid' ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handlePay(bill)}
-                      disabled={isPaying || bill.status === 'paid'}
-                    >
-                      {isPaying ? (
-                        <>
-                          <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                          Processing…
-                        </>
-                      ) : (
-                        'Pay via GCash'
-                      )}
-                    </Button>
-                  ) : (
-                    <span className="text-sm font-medium text-muted-foreground">No Action</span>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {/*For future use*/}
+      {/* <BillingSummaryCards
+        totalItems={totalItems}
+        unpaidCount={unpaidCount}
+        overdueCount={overdueCount}
+        totalDue={totalDue}
+      /> */}
 
-      <div className="flex justify-end">
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      <BillingTable
+        billings={billings}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        totalItems={totalItems}
+        isPaying={isPaying}
+        onPay={handlePay}
+      />
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </p>
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }
