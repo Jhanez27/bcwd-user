@@ -1,52 +1,55 @@
 "use client";
-import { CustomPagination } from '@/components/shared/CustomPagination';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+
+import { CreditCard } from 'lucide-react';
 import { usePayment } from '@/features/payments/hooks/usePayment';
+import { CustomPagination } from '@/components/shared/CustomPagination';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { PaymentHistoryTable } from './PaymentHistoryTable';
 
 export function PaymentHistory() {
-  const { payments, currentPage, totalPages, totalItems, itemsPerPage, hasNextPage, handlePageChange } = usePayment();
+  const {
+    payments,
+    currentPage,
+    totalPages,
+    totalItems,
+    itemsPerPage,
+    handlePageChange,
+  } = usePayment();
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Payment History</h1>
-      </div>
+      <PageHeader
+        title="Payment History"
+        description="View your payment records and transaction details"
+        badge={
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-xs text-muted-foreground font-medium whitespace-nowrap">
+            <CreditCard className="w-3.5 h-3.5" />
+            {totalItems} {totalItems === 1 ? 'payment' : 'payments'}
+          </div>
+        }
+      />
 
-      <div className="border border-border rounded-lg bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-b border-border hover:bg-transparent">
-              <TableHead className="text-foreground font-semibold">Payment Date</TableHead>
-              <TableHead className="text-foreground font-semibold">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {payments.map((payment, index) => (
-              <TableRow key={index} className="border-b border-border hover:bg-muted/50">
-                <TableCell className="text-foreground">{new Date(payment.paid_at).toLocaleDateString()}</TableCell>
-                <TableCell className="text-foreground">{payment.billing.charges}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <PaymentHistoryTable
+        payments={payments}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        totalItems={totalItems}
+      />
 
-      <div className="flex justify-end">
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </p>
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }
