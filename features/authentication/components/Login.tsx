@@ -12,50 +12,22 @@ export function Login() {
     <div className="grid lg:grid-cols-2 min-h-screen relative">
       {/* Left side */}
 
-      <div className="hidden lg:flex bg-gradient-to-br from-primary via-secondary to-primary relative overflow-hidden items-center justify-center">
+      <div
+        className="hidden lg:flex  overflow-hidden items-center justify-center"
+        style={{
+          backgroundImage: "url('/droplet-bg-compressed.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         {/* Logo */}
         <div className="hidden lg:flex absolute left-0 top-0 m-4 z-20">
           <Link href="/">
             <Logo />
           </Link>
         </div>
-        <div className="absolute inset-0 opacity-20">
-          <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <filter id="blur">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-              </filter>
-            </defs>
-            <circle
-              cx="20"
-              cy="30"
-              r="15"
-              fill="currentColor"
-              filter="url(#blur)"
-              className="text-accent opacity-40"
-            />
-            <circle
-              cx="70"
-              cy="50"
-              r="20"
-              fill="currentColor"
-              filter="url(#blur)"
-              className="text-secondary opacity-30"
-            />
-            <circle
-              cx="40"
-              cy="70"
-              r="25"
-              fill="currentColor"
-              filter="url(#blur)"
-              className="text-primary opacity-50"
-            />
-          </svg>
-        </div>
+
         <div className="relative z-10 text-center text-white">
           <h1 className="text-5xl font-bold mb-4">Water</h1>
           <p className="text-xl opacity-80">Your essential resource</p>
