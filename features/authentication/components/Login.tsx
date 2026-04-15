@@ -36,7 +36,7 @@ export function Login() {
 
       {/* Right side - Login form */}
       <div className="bg-background p-8 flex flex-col justify-center">
-        <div className="max-w-sm mx-auto w-full space-y-8">
+        <div className="max-w-sm mx-auto w-full space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold text-foreground">
               Login Account
