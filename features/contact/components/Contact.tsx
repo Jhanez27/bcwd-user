@@ -7,6 +7,7 @@ import {
   Mail,
   Clock,
   Facebook,
+  LogIn,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 
@@ -32,7 +33,8 @@ export function Contact() {
               </Link>
             </div>
             <Link href="/login">
-              <Button className="bg-white text-primary hover:bg-white/90">
+              <Button className="gap-2 bg-white text-primary hover:bg-white/90">
+                <LogIn className="h-4 w-4" />
                 Login
               </Button>
             </Link>

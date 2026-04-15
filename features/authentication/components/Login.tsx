@@ -11,10 +11,13 @@ export function Login() {
   return (
     <div className="grid lg:grid-cols-2 min-h-screen relative">
       {/* Left side */}
+
       <div className="hidden lg:flex bg-gradient-to-br from-primary via-secondary to-primary relative overflow-hidden items-center justify-center">
         {/* Logo */}
-        <div className="hidden lg:flex absolute left-0 top-0 m-4">
-          <Logo />
+        <div className="hidden lg:flex absolute left-0 top-0 m-4 z-20">
+          <Link href="/">
+            <Logo />
+          </Link>
         </div>
         <div className="absolute inset-0 opacity-20">
           <svg
