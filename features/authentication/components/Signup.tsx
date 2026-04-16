@@ -68,7 +68,15 @@ export function Signup() {
   return (
     <div className="grid lg:grid-cols-2 min-h-screen relative">
       {/* Left side */}
-      <div className="hidden lg:flex bg-gradient-to-br from-primary via-secondary to-primary relative overflow-hidden items-center justify-center p-12">
+      <div
+        className="hidden lg:flex  overflow-hidden items-center justify-center"
+        style={{
+          backgroundImage: "url('/droplet-bg-compressed.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         {/* Logo */}
         <div className="hidden lg:flex absolute left-0 top-0 m-4">
           <Link href="/">
@@ -76,63 +84,110 @@ export function Signup() {
           </Link>
         </div>
 
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            preserveAspectRatio="none"
-          >
-            <circle
-              cx="20"
-              cy="30"
-              r="15"
-              fill="currentColor"
-              className="text-accent opacity-40 animate-pulse"
-            />
-            <circle
-              cx="70"
-              cy="50"
-              r="20"
-              fill="currentColor"
-              className="text-secondary opacity-30 animate-bounce"
-              style={{ animationDuration: "4s" }}
-            />
-            <circle
-              cx="40"
-              cy="70"
-              r="25"
-              fill="currentColor"
-              className="text-primary opacity-50 animate-pulse"
-              style={{ animationDuration: "6s" }}
-            />
-          </svg>
-        </div>
-        <div className="relative z-10 text-center text-white max-w-lg">
-          <div className="mb-8 inline-flex h-20 w-20 items-center justify-center rounded-3xl bg-white/10 backdrop-blur-md shadow-2xl rotate-12">
-            <span className="text-2xl font-black -rotate-12">BCWD</span>
+        {/* Hero Text Slideshow */}
+        <div className="relative z-10 text-center text-white max-w-lg mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <style>{`
+            /* Text Sliding Animation (Stays 8 seconds resting, 2 seconds sliding) */
+            @keyframes slide-hero {
+              0%, 20% { transform: translateX(0%); }
+              25%, 45% { transform: translateX(-20%); }
+              50%, 70% { transform: translateX(-40%); }
+              75%, 95% { transform: translateX(-60%); }
+              100% { transform: translateX(-80%); }
+            }
+
+            /* Indicator 1: Snaps off halfway through the slide (22.5%) */
+            @keyframes dot-1 {
+              0%, 22.4% { background-color: #ffffff; }
+              22.5%, 97.4% { background-color: rgba(255, 255, 255, 0.2); }
+              97.5%, 100% { background-color: #ffffff; }
+            }
+
+            /* Indicator 2: Snaps on at 22.5%, off at 47.5% */
+            @keyframes dot-2 {
+              0%, 22.4% { background-color: rgba(255, 255, 255, 0.2); }
+              22.5%, 47.4% { background-color: #ffffff; }
+              47.5%, 100% { background-color: rgba(255, 255, 255, 0.2); }
+            }
+
+            /* Indicator 3: Snaps on at 47.5%, off at 72.5% */
+            @keyframes dot-3 {
+              0%, 47.4% { background-color: rgba(255, 255, 255, 0.2); }
+              47.5%, 72.4% { background-color: #ffffff; }
+              72.5%, 100% { background-color: rgba(255, 255, 255, 0.2); }
+            }
+
+            /* Indicator 4: Snaps on at 72.5%, off at 97.5% */
+            @keyframes dot-4 {
+              0%, 72.4% { background-color: rgba(255, 255, 255, 0.2); }
+              72.5%, 97.4% { background-color: #ffffff; }
+              97.5%, 100% { background-color: rgba(255, 255, 255, 0.2); }
+            }
+          `}</style>
+
+          {/* Outer Mask */}
+          <div className="w-full overflow-hidden">
+            {/* Sliding Track - 40s total */}
+            <div className="flex w-[500%] animate-[slide-hero_40s_cubic-bezier(0.83,0,0.17,1)_infinite]">
+              <div className="w-1/5 shrink-0 px-2">
+                <h1 className="text-6xl font-black mb-6 tracking-tight">
+                  Pure &amp; Simple
+                </h1>
+                <p className="text-xl text-white/80 leading-relaxed">
+                  Join thousands of residents in Baybay City managing their
+                  water bills with ease and transparency.
+                </p>
+              </div>
+
+              <div className="w-1/5 shrink-0 px-2">
+                <h1 className="text-6xl font-black mb-6 tracking-tight">
+                  Smart Tracking
+                </h1>
+                <p className="text-xl text-white/80 leading-relaxed">
+                  Monitor your daily water consumption and get real-time alerts
+                  to prevent unexpected leaks.
+                </p>
+              </div>
+
+              <div className="w-1/5 shrink-0 px-2">
+                <h1 className="text-6xl font-black mb-6 tracking-tight">
+                  Instant Payments
+                </h1>
+                <p className="text-xl text-white/80 leading-relaxed">
+                  Settle your monthly dues securely from your device without
+                  ever waiting in long lines again.
+                </p>
+              </div>
+
+              <div className="w-1/5 shrink-0 px-2">
+                <h1 className="text-6xl font-black mb-6 tracking-tight">
+                  Eco-Friendly
+                </h1>
+                <p className="text-xl text-white/80 leading-relaxed">
+                  Switch to paperless billing and join our green initiative to
+                  help conserve our local resources.
+                </p>
+              </div>
+
+              {/* Clone */}
+              <div className="w-1/5 shrink-0 px-2" aria-hidden="true">
+                <h1 className="text-6xl font-black mb-6 tracking-tight">
+                  Pure &amp; Simple
+                </h1>
+                <p className="text-xl text-white/80 leading-relaxed">
+                  Join thousands of residents in Baybay City managing their
+                  water bills with ease and transparency.
+                </p>
+              </div>
+            </div>
           </div>
-          <h1 className="text-6xl font-black mb-6 tracking-tight">
-            Pure &amp; Simple
-          </h1>
-          <p className="text-xl text-white/80 leading-relaxed">
-            Join thousands of residents in Baybay City managing their water
-            bills with ease and transparency.
-          </p>
+
+          {/* Progress Indicators */}
           <div className="mt-12 flex justify-center gap-4">
-            <div className="h-1 w-12 rounded-full bg-white/20" />
-            <div
-              className={cn(
-                "h-1 w-12 rounded-full transition-all duration-300",
-                step === 1 ? "bg-white" : "bg-white/20",
-              )}
-            />
-            <div
-              className={cn(
-                "h-1 w-12 rounded-full transition-all duration-300",
-                step === 2 ? "bg-white" : "bg-white/20",
-              )}
-            />
-            <div className="h-1 w-12 rounded-full bg-white/20" />
+            <div className="h-1 w-12 rounded-full bg-white/20 animate-[dot-1_40s_linear_infinite]" />
+            <div className="h-1 w-12 rounded-full bg-white/20 animate-[dot-2_40s_linear_infinite]" />
+            <div className="h-1 w-12 rounded-full bg-white/20 animate-[dot-3_40s_linear_infinite]" />
+            <div className="h-1 w-12 rounded-full bg-white/20 animate-[dot-4_40s_linear_infinite]" />
           </div>
         </div>
       </div>

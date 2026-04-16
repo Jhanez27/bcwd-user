@@ -28,7 +28,7 @@ export function Login() {
           </Link>
         </div>
 
-        <div className="relative z-10 text-center text-white">
+        <div className="relative z-10 text-center text-white animate-in fade-in slide-in-from-bottom-4 duration-700">
           <h1 className="text-5xl font-bold mb-4">Water</h1>
           <p className="text-xl opacity-80">Your essential resource</p>
         </div>

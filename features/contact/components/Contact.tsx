@@ -18,7 +18,7 @@ export function Contact() {
       <div
         className="flex flex-col flex-1 z-0"
         style={{
-          backgroundImage: "url('/wave-blue-bg.png')",
+          backgroundImage: "url('/wave-blue-bg-non-compressed.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
