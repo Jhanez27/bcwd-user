@@ -47,7 +47,7 @@ export function Landing() {
         {/* Content */}
         <div className="relative z-20 flex flex-col justify-center ">
           {/* Hero Section */}
-          <section className="container mx-auto px-4 py-20">
+          <section className="container mx-auto px-4 py-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="bg-white/7 border border-white/20 rounded-2xl p-12 text-white mb-20">
               <div className="max-w-2xl space-y-6">
                 <div className="flex items-center gap-3 text-white/80">

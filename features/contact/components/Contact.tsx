@@ -42,7 +42,7 @@ export function Contact() {
         </header>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-12 flex-1">
+        <div className="container mx-auto px-4 py-12 flex-1 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Left side - Contact info */}
             <div className="text-white space-y-8">
