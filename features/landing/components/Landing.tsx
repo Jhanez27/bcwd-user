@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, Phone, FileText, AlertCircle, Facebook } from "lucide-react";
+import {
+  LogIn,
+  Phone,
+  FileText,
+  AlertCircle,
+  Facebook,
+  CircleCheck,
+} from "lucide-react";
 import { Logo } from "@/components/logo";
 
 export function Landing() {
@@ -27,7 +34,7 @@ export function Landing() {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: "url('/wave-blue-bg-non-compressed.png')",
+            backgroundImage: "url('/wave-blue-bg-non-compressed.webp')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -40,11 +47,11 @@ export function Landing() {
         {/* Content */}
         <div className="relative z-20 flex flex-col justify-center ">
           {/* Hero Section */}
-          <section className="container mx-auto px-4 py-20">
+          <section className="container mx-auto px-4 py-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="bg-white/7 border border-white/20 rounded-2xl p-12 text-white mb-20">
               <div className="max-w-2xl space-y-6">
                 <div className="flex items-center gap-3 text-white/80">
-                  <AlertCircle className="h-5 w-5" />
+                  <CircleCheck className="h-5 w-5" />
                   <span className="text-sm">
                     Your reliable way to stay on top of your water bills.
                   </span>

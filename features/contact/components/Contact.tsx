@@ -7,6 +7,7 @@ import {
   Mail,
   Clock,
   Facebook,
+  LogIn,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 
@@ -17,7 +18,7 @@ export function Contact() {
       <div
         className="flex flex-col flex-1 z-0"
         style={{
-          backgroundImage: "url('/wave-blue-bg.png')",
+          backgroundImage: "url('/wave-blue-bg-non-compressed.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -32,7 +33,8 @@ export function Contact() {
               </Link>
             </div>
             <Link href="/login">
-              <Button className="bg-white text-primary hover:bg-white/90">
+              <Button className="gap-2 bg-white text-primary hover:bg-white/90">
+                <LogIn className="h-4 w-4" />
                 Login
               </Button>
             </Link>
@@ -40,7 +42,7 @@ export function Contact() {
         </header>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-12 flex-1">
+        <div className="container mx-auto px-4 py-12 flex-1 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Left side - Contact info */}
             <div className="text-white space-y-8">
