@@ -265,4 +265,16 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  @keyframes waterFlow {
+    0% {
+      background-position: 0% 70%;
+    }
+    50% {
+      background-position: 100% 70%;
+    }
+    100% {
+      background-position: 0% 70%;
+    }
+  }
 }

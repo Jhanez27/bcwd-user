@@ -15,9 +15,9 @@ import { cn } from "@/lib/utils";
 
 const menuItems = [
   { href: "/dashboard", label: "Home", icon: Home },
+  { href: "/billings", label: "Billings", icon: FileText },
   { href: "/payment-history", label: "Payment History", icon: CreditCard },
   { href: "/create-ticket", label: "Create Ticket", icon: Ticket },
-  { href: "/billings", label: "Billings", icon: FileText },
   { href: "/announcement", label: "Announcement", icon: Megaphone },
 ];
 
@@ -36,12 +36,23 @@ export function Sidebar({
   };
 
   return (
-    <aside
-      className={cn(
-        "hidden shrink-0 bg-[#232323] xl:flex xl:flex-col transition-[width] duration-200 ease-in-out sticky top-0 h-svh z-50 text-white",
-        collapsed ? "w-15" : "w-60",
+    <>
+      {/* Mobile backdrop */}
+      {!collapsed && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 h-svh xl:hidden"
+          onClick={() => setCollapsed(true)}
+        />
       )}
-    >
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 flex flex-col shrink-0 bg-black/70 backdrop-blur-md transition-all duration-200 ease-in-out h-svh z-50 text-white",
+          "xl:sticky xl:top-0",
+          collapsed
+            ? "-translate-x-full xl:translate-x-0 xl:w-15 w-60"
+            : "translate-x-0 w-60"
+        )}
+      >
       <div
         className={cn(
           "flex items-center h-18 px-3 gap-2 shrink-0 border-sidebar-border",
@@ -74,7 +85,6 @@ export function Sidebar({
         )}
       </div>
 
-      {/* ── Nav ── */}
       <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-0.5">
         {menuItems.map((item) => {
           const Icon = item.icon;
@@ -131,5 +141,6 @@ export function Sidebar({
       >
       </div> */}
     </aside>
+    </>
   );
 }
