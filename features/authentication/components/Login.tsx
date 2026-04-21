@@ -4,9 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "../hooks/useLogin";
 import { Logo } from "@/components/logo";
+import { toast } from "sonner";
 
 export function Login() {
-  const { form, onSubmit } = useLogin();
+  const { form, onSubmit, onResetPass, resetCooldown } = useLogin();
+
+  const handleResetPassword = () => {
+    if (!form.getValues("email")) {
+      toast.error("Please enter your email address");
+      return;
+    }
+    onResetPass(form.getValues("email"));
+  };
 
   return (
     <div className="grid lg:grid-cols-2 min-h-screen relative">
@@ -76,6 +85,20 @@ export function Login() {
                   {form.formState.errors.password.message}
                 </p>
               )}
+            </div>
+            {/* Forgot Password */}
+            <div className="text-right">
+              <Button
+                onClick={handleResetPassword}
+                variant="link"
+                type="button"
+                disabled={resetCooldown > 0}
+                className="text-xs text-muted-foreground"
+              >
+                {resetCooldown > 0
+                  ? `Resend available in ${resetCooldown}s`
+                  : "Forgot Password?"}
+              </Button>
             </div>
 
             <Button
