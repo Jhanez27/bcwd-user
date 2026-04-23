@@ -1,6 +1,12 @@
+"use client"
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { useAnnouncementData } from '../hooks/useAnnouncementData';
+import { cn } from '@/lib/utils';
 
 export function Announcement() {
+  const { announcements, loading, categories } = useAnnouncementData();
+  console.log(announcements)
+  console.log(categories)
   return (
     <div className="space-y-6">
       <div>
@@ -26,17 +32,18 @@ export function Announcement() {
       <h2 className="text-2xl font-bold text-foreground">Site announcements</h2>
 
       {/* Announcements Grid */}
-      <div className="grid md:grid-cols-3 gap-6">
-        {[1, 2, 3].map((item) => (
-          <Card key={item} className="border-border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+      <div className={cn("grid gap-6", announcements.length > 1 ? "md:grid-cols-3" : "")}>
+        {announcements.map((announcement) => (
+          <Card key={announcement.id} className="border-border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
             <div className="relative h-48 w-full bg-muted">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <img src={announcement.attachment_url} alt={announcement.title} className="w-full h-full object-cover" />
               <div className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded text-xs">
-                2 more
+                {announcement.announcement_category.name}
               </div>
             </div>
             <CardHeader>
-              <h3 className="font-bold text-foreground">Baybay City Water District</h3>
+              <h3 className="font-bold text-foreground">{announcement.title}</h3>
+              <p className="text-sm text-muted-foreground">{announcement.description}</p>
             </CardHeader>
           </Card>
         ))}
