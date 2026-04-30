@@ -10,7 +10,7 @@ import { AnnouncementFilters, SortDirection } from './AnnouncementFilters';
 
 export function Announcement() {
   const { announcements, categories, loading } = useAnnouncementData();
-  // const {announcements, categories, loading} = { announcements: mockAnnouncements, categories: mockCategories, loading: false };
+  //const {announcements, categories, loading} = { announcements: mockAnnouncements, categories: mockCategories, loading: false };
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
@@ -52,7 +52,7 @@ export function Announcement() {
         }
       />
 
-      <div className="grid gap-5 lg:gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="grid gap-5 lg:gap-12 lg:grid-cols-[220px_minmax(0,1fr)] lg:pl-4 xl:pl-25">
         <AnnouncementFilters
           categories={categoryOptions}
           selectedCategory={selectedCategory}
