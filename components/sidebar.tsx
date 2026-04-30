@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   Home,
   CreditCard,
@@ -9,9 +10,13 @@ import {
   FileText,
   Megaphone,
   Menu,
+  LogOut,
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
+import { getCurrentConsumer } from "@/supabase/consumer";
+import { createClient } from "@/utils/supabase/client";
 
 const menuItems = [
   { href: "/dashboard", label: "Home", icon: Home },
@@ -29,6 +34,28 @@ export function Sidebar({
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    getCurrentConsumer().then(setUser);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 1279px)").matches;
+    document.body.style.overflow = !collapsed && isMobile ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [collapsed]);
+
+  const closeSidebarOnMobile = () => {
+    if (window.matchMedia("(max-width: 1279px)").matches) setCollapsed(true);
+  };
 
   const isActive = (href: string) => {
     if (href === "/dashboard" && pathname === "/dashboard") return true;
@@ -40,13 +67,13 @@ export function Sidebar({
       {/* Mobile backdrop */}
       {!collapsed && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 h-svh xl:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 xl:hidden"
           onClick={() => setCollapsed(true)}
         />
       )}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 flex flex-col shrink-0 bg-black/70 backdrop-blur-md transition-all duration-200 ease-in-out h-svh z-50 text-white",
+          "fixed inset-y-0 left-0 flex flex-col shrink-0 bg-[#0D163A] backdrop-blur-md transition-all duration-200 ease-in-out h-svh z-50 text-white",
           "xl:sticky xl:top-0",
           collapsed
             ? "-translate-x-full xl:translate-x-0 xl:w-15 w-60"
@@ -96,6 +123,7 @@ export function Sidebar({
               href={item.href}
               aria-current={active ? "page" : undefined}
               title={collapsed ? item.label : undefined}
+              onClick={closeSidebarOnMobile}
               className={cn(
                 "group relative flex items-center gap-3 rounded-md text-sm mb-2",
                 "transition-colors duration-150",
@@ -132,14 +160,42 @@ export function Sidebar({
         })}
       </nav>
 
-      {/* ── Footer slot ── */}
-      {/* <div
-        className={cn(
-          "shrink-0 border-t border-sidebar-border",
-          collapsed ? "p-2" : "px-3 py-3",
-        )}
-      >
-      </div> */}
+      {/* ── User footer — mobile only ── */}
+      <div className="xl:hidden shrink-0 border-t border-white/10 px-3 py-3">
+        <div className="flex items-center gap-2.5">
+          <Avatar className="h-8 w-8 shrink-0">
+            <AvatarImage
+              src={
+                user?.avatar_url ||
+                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
+              }
+            />
+            <AvatarFallback className="bg-white/10 text-white text-xs">
+              {user?.first_name?.[0]}
+              {user?.last_name?.[0]}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-white truncate">
+              {user?.first_name} {user?.last_name}
+            </p>
+            <Link
+              href="/profile"
+              onClick={closeSidebarOnMobile}
+              className="text-xs text-white/50 hover:text-white/80 transition-colors"
+            >
+              View profile
+            </Link>
+          </div>
+          <button
+            onClick={handleLogout}
+            aria-label="Logout"
+            className="flex items-center justify-center w-8 h-8 rounded-md text-white/50 hover:bg-white/10 hover:text-white transition-colors shrink-0"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
     </aside>
     </>
   );
