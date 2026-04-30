@@ -1,97 +1,50 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText } from 'lucide-react';
-import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
+import { Hash } from "lucide-react";
+import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { DashboardStats } from "./DashboardStats";
+import { StatusBanner } from "./StatusBanner";
+import { CurrentBillCard } from "./CurrentBillCard";
+import { QuickActions } from "./QuickActions";
+import { AccountSummary } from "./AccountSummary";
+import { formatLongDate, getGreeting } from "../utils";
 
 export function Dashboard() {
-  const { reading, billing } = useDashboard();
+  const { user, reading, billing, recentReadings, loading } = useDashboard();
+  const greeting = getGreeting();
+  const firstName = user?.first_name ?? "there";
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-secondary/50 to-accent/50 rounded-lg p-6 border border-secondary/30">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">Statement of Account</h2>
-            <p className="text-muted-foreground">January 2026</p>
-          </div>
-          <div className="bg-accent/40 rounded-full p-4">
-            <FileText className="h-8 w-8 text-primary" />
-          </div>
+      <PageHeader
+        title={`${greeting}, ${firstName}`}
+        description={formatLongDate()}
+        badge={
+          user?.account_number ? (
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-xs text-muted-foreground font-medium whitespace-nowrap">
+              <Hash className="w-3.5 h-3.5" />
+              Account · {user.account_number}
+            </div>
+          ) : null
+        }
+      />
+
+      <StatusBanner billing={billing} />
+
+      <DashboardStats billing={billing} reading={reading} loading={loading} />
+
+      <div className="grid gap-6 lg:grid-cols-3 lg:items-start">
+        <div className="lg:col-span-2 space-y-6">
+          <CurrentBillCard
+            billing={billing}
+            reading={reading}
+            loading={loading}
+          />{" "}
         </div>
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card className="border-border">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-primary" />
-                Latest Reading
-              </CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-col justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">From:</span>
-              <span className="text-muted-foreground">
-                {reading?.reading_from ? new Date(reading.reading_from).toLocaleDateString() : '-'}
-              </span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">To:</span>
-              <span className="text-muted-foreground">
-                {reading?.reading_to ? new Date(reading.reading_to).toLocaleDateString() : '-'}
-              </span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">Previous Reading:</span>
-              <span className="text-muted-foreground">{reading?.previous_reading ?? '-'}</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">Current Reading:</span>
-              <span className="text-muted-foreground">{reading?.current_reading ?? '-'}</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="font-medium text-foreground">Usage:</span>
-              <span className="text-muted-foreground">{reading?.usage ?? '-'}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-4">
-          <Card className="border-border">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-base">Latest Billing Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between py-2 border-b border-border">
-                <span className="font-medium text-foreground">Due Date:</span>
-                <span className="text-muted-foreground">
-                  {billing?.due_date ? new Date(billing.due_date).toLocaleDateString() : '-'}
-                </span>
-              </div>
-              <div className="flex justify-between py-2">
-                <span className="font-medium text-foreground">Disconnection:</span>
-                <span className="text-muted-foreground">
-                  {billing?.disconnection_date ? new Date(billing.disconnection_date).toLocaleDateString() : '-'}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border bg-gradient-to-br from-primary/5 to-accent/5">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Total Amount Due:</span>
-                </div>
-                <span className="text-2xl font-bold text-primary">
-                  {billing?.charges ?? 0}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="space-y-6 lg:sticky lg:top-24">
+          <AccountSummary user={user} loading={loading} />
+          <QuickActions />
         </div>
       </div>
     </div>
