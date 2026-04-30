@@ -15,7 +15,7 @@ export default function AuthenticatedLayout({
     <div className="flex relative min-h-screen">
       {/* Layered water effect */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-90 z-0"
+        className="pointer-events-none fixed inset-0 opacity-90 z-0"
         style={{
           backgroundImage: "url('/sea-bg.png')",
           backgroundSize: "cover",
