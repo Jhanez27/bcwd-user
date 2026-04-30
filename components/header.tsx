@@ -44,9 +44,9 @@ export function Header({
 
     let query = supabase
       .from("billing")
-      .select("id, created_at, meter_reading!inner(meter!inner(consumer_id))")
+      .select("id, due_date, meter_reading!inner(meter!inner(consumer_id))")
       .eq("meter_reading.meter.consumer_id", user.id)
-      .order("created_at", { ascending: false })
+      .order("due_date", { ascending: false })
       .limit(1)
       .maybeSingle();
 
@@ -56,7 +56,7 @@ export function Header({
     if (!lastSeen) {
       setHasUnread(true);
     } else {
-      setHasUnread(new Date(data.created_at) > new Date(lastSeen));
+      setHasUnread(new Date(data.due_date) > new Date(lastSeen));
     }
   }, [user?.id, storageKey, supabase]);
 

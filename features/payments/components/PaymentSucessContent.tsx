@@ -2,13 +2,21 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { usePaymentAction } from "../hooks/usePaymentAction";
+import { useEffect } from "react";
 
 export const PaymentSuccessContent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const billId = searchParams.get("bill_id");
+    const { paymentActionUpdateStatus } = usePaymentAction();
 
+    useEffect(() => {
+        if (billId) {
+            paymentActionUpdateStatus(Number(billId));
+        }
+    }, [billId]);
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4">
             <div className="max-w-md w-full text-center space-y-6">
