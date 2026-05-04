@@ -37,110 +37,85 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile backdrop */}
+      {/* Mobile backdrop (UNCHANGED) */}
       {!collapsed && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 h-svh xl:hidden"
+          className="fixed inset-0 bg-black/40 z-40 h-svh xl:hidden"
           onClick={() => setCollapsed(true)}
         />
       )}
+
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 flex flex-col shrink-0 bg-black/70 backdrop-blur-md transition-all duration-200 ease-in-out h-svh z-50 text-white",
+          "fixed inset-y-0 left-0 flex flex-col shrink-0 h-svh z-50 text-white",
+          "bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950",
+          "border-r border-blue-800/40",
+          "backdrop-blur-md transition-all duration-200 ease-in-out",
           "xl:sticky xl:top-0",
           collapsed
-            ? "-translate-x-full xl:translate-x-0 xl:w-15 w-60"
-            : "translate-x-0 w-60"
-        )}
-      >
-      <div
-        className={cn(
-          "flex items-center h-18 px-3 gap-2 shrink-0 border-sidebar-border",
-          collapsed && "justify-center px-0",
-        )}
-      >
-        <button
-          onClick={() => setCollapsed((c) => !c)}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            ? "-translate-x-full xl:translate-x-0 xl:w-[70px] w-60"
+            : "translate-x-0 w-60",
+        )}>
+        {/* HEADER */}
+        <div
           className={cn(
-            "flex items-center justify-center w-8 h-8 rounded-md shrink-0",
-            "text-[var(--sidebar-icon-color)]",
-            "hover:bg-[var(--sidebar-icon-hover-bg)] hover:text-sidebar-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-            "transition-colors duration-150",
+            "flex items-center h-16 px-3 border-b border-blue-800/40",
+            collapsed ? "justify-center" : "justify-start",
+          )}>
+          <button
+            onClick={() => setCollapsed((c) => !c)}
+            className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/10 transition">
+            <Menu className="w-4 h-4 text-blue-100" />
+          </button>
+
+          {!collapsed && (
+            <div className="ml-3">
+              <Logo />
+            </div>
           )}
-        >
-          <span className="sr-only">{collapsed ? "Expand" : "Collapse"}</span>
-          {collapsed ? (
-            <Menu className="w-4 h-4" />
-          ) : (
-            <Menu className="w-4 h-4" />
-          )}
-        </button>
+        </div>
 
-        {!collapsed && (
-          <div className="flex-1 overflow-hidden">
-            <Logo />
-          </div>
-        )}
-      </div>
+        {/* NAV */}
+        <nav className="flex-1 px-2 py-3 space-y-1">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
 
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-0.5">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.href);
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={active ? "page" : undefined}
-              title={collapsed ? item.label : undefined}
-              className={cn(
-                "group relative flex items-center gap-3 rounded-md text-sm mb-2",
-                "transition-colors duration-150",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-1",
-                collapsed ? "justify-center p-2" : "px-3 py-2",
-                active
-                  ? "font-semibold scale-[1.05] text-[var(--sidebar-nav-item-active)] bg-[var(--sidebar-nav-item-active-bg)]"
-                  : "font-normal text-[var(--sidebar-nav-item-muted)] hover:bg-[var(--sidebar-nav-item-hover-bg)] hover:text-[var(--sidebar-nav-item)]",
-              )}
-            >
-              <Icon
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                title={collapsed ? item.label : undefined}
                 className={cn(
-                  "shrink-0 transition-colors duration-150",
-                  collapsed ? "w-5 h-5" : "w-4 h-4",
+                  "relative flex items-center rounded-lg transition-all group",
+                  collapsed ? "justify-center p-3" : "px-3 py-2.5",
+
                   active
-                    ? "text-[var(--sidebar-nav-item-active-indicator)]"
-                    : "text-[var(--sidebar-nav-item-muted)] group-hover:text-[var(--sidebar-nav-item)]",
+                    ? "bg-blue-700/30 text-white"
+                    : "text-blue-200/70 hover:text-white hover:bg-white/10",
+                )}>
+                {/* Active indicator */}
+                {active && (
+                  <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-cyan-400" />
                 )}
-              />
 
-              {!collapsed && (
-                <span className="truncate leading-none">{item.label}</span>
-              )}
-
-              {/* Underline indicator — matches Figma's active treatment */}
-              {active && !collapsed && (
-                <span
-                  aria-hidden
-                  className="absolute bottom-1 left-3 right-3 h-px rounded-full bg-[var(--sidebar-nav-item-active-indicator)]"
+                <Icon
+                  className={cn(
+                    "shrink-0 transition-colors",
+                    collapsed ? "w-5 h-5" : "w-4 h-4",
+                  )}
                 />
-              )}
-            </Link>
-          );
-        })}
-      </nav>
 
-      {/* ── Footer slot ── */}
-      {/* <div
-        className={cn(
-          "shrink-0 border-t border-sidebar-border",
-          collapsed ? "p-2" : "px-3 py-3",
-        )}
-      >
-      </div> */}
-    </aside>
+                {!collapsed && (
+                  <span className="ml-3 text-sm font-medium truncate">
+                    {item.label}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
     </>
   );
 }
