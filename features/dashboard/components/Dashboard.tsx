@@ -1,7 +1,7 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText } from 'lucide-react';
-import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileText } from "lucide-react";
+import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 
 export function Dashboard() {
   const { reading, billing } = useDashboard();
@@ -11,8 +11,17 @@ export function Dashboard() {
       <div className="bg-gradient-to-r from-secondary/50 to-accent/50 rounded-lg p-6 border border-secondary/30">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">Statement of Account</h2>
-            <p className="text-muted-foreground">January 2026</p>
+            <h2 className="text-2xl font-bold text-foreground mb-1">
+              Statement of Account
+            </h2>
+            <p className="text-muted-foreground">
+              {reading?.reading_from
+                ? new Date(reading.reading_from).toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })
+                : "-"}
+            </p>
           </div>
           <div className="bg-accent/40 rounded-full p-4">
             <FileText className="h-8 w-8 text-primary" />
@@ -34,26 +43,40 @@ export function Dashboard() {
             <div className="flex flex-col justify-between py-2 border-b border-border">
               <span className="font-medium text-foreground">From:</span>
               <span className="text-muted-foreground">
-                {reading?.reading_from ? new Date(reading.reading_from).toLocaleDateString() : '-'}
+                {reading?.reading_from
+                  ? new Date(reading.reading_from).toLocaleDateString()
+                  : "-"}
               </span>
             </div>
             <div className="flex justify-between py-2 border-b border-border">
               <span className="font-medium text-foreground">To:</span>
               <span className="text-muted-foreground">
-                {reading?.reading_to ? new Date(reading.reading_to).toLocaleDateString() : '-'}
+                {reading?.reading_to
+                  ? new Date(reading.reading_to).toLocaleDateString()
+                  : "-"}
               </span>
             </div>
             <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">Previous Reading:</span>
-              <span className="text-muted-foreground">{reading?.previous_reading ?? '-'}</span>
+              <span className="font-medium text-foreground">
+                Previous Reading:
+              </span>
+              <span className="text-muted-foreground">
+                {reading?.previous_reading ?? "-"}
+              </span>
             </div>
             <div className="flex justify-between py-2 border-b border-border">
-              <span className="font-medium text-foreground">Current Reading:</span>
-              <span className="text-muted-foreground">{reading?.current_reading ?? '-'}</span>
+              <span className="font-medium text-foreground">
+                Current Reading:
+              </span>
+              <span className="text-muted-foreground">
+                {reading?.current_reading ?? "-"}
+              </span>
             </div>
             <div className="flex justify-between py-2">
               <span className="font-medium text-foreground">Usage:</span>
-              <span className="text-muted-foreground">{reading?.usage ?? '-'}</span>
+              <span className="text-muted-foreground">
+                {reading?.usage ?? "-"}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -61,19 +84,27 @@ export function Dashboard() {
         <div className="space-y-4">
           <Card className="border-border">
             <CardHeader className="pb-4">
-              <CardTitle className="text-base">Latest Billing Information</CardTitle>
+              <CardTitle className="text-base">
+                Latest Billing Information
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between py-2 border-b border-border">
                 <span className="font-medium text-foreground">Due Date:</span>
                 <span className="text-muted-foreground">
-                  {billing?.due_date ? new Date(billing.due_date).toLocaleDateString() : '-'}
+                  {billing?.due_date
+                    ? new Date(billing.due_date).toLocaleDateString()
+                    : "-"}
                 </span>
               </div>
               <div className="flex justify-between py-2">
-                <span className="font-medium text-foreground">Disconnection:</span>
+                <span className="font-medium text-foreground">
+                  Disconnection:
+                </span>
                 <span className="text-muted-foreground">
-                  {billing?.disconnection_date ? new Date(billing.disconnection_date).toLocaleDateString() : '-'}
+                  {billing?.disconnection_date
+                    ? new Date(billing.disconnection_date).toLocaleDateString()
+                    : "-"}
                 </span>
               </div>
             </CardContent>
@@ -87,7 +118,7 @@ export function Dashboard() {
                   <span className="font-medium">Total Amount Due:</span>
                 </div>
                 <span className="text-2xl font-bold text-primary">
-                  {billing?.charges ?? 0}
+                  {(billing?.charges ?? 0) + (billing?.penalty ?? 0)}
                 </span>
               </div>
             </CardContent>
