@@ -49,7 +49,7 @@ export function Sidebar({
         className={cn(
           "fixed inset-y-0 left-0 flex flex-col shrink-0 h-svh z-50 text-white",
           "bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950",
-          "border-r border-blue-800/40",
+
           "backdrop-blur-md transition-all duration-200 ease-in-out",
           "xl:sticky xl:top-0",
           collapsed
@@ -59,7 +59,7 @@ export function Sidebar({
         {/* HEADER */}
         <div
           className={cn(
-            "flex items-center h-16 px-3 border-b border-blue-800/40",
+            "flex items-center h-16 px-3",
             collapsed ? "justify-center" : "justify-start",
           )}>
           <button
