@@ -134,41 +134,43 @@ export function Header({
             </span>
           )}
         </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="gap-2 text-white">
-              <span className="text-sm font-medium">
-                {user?.first_name || "User"} {user?.last_name || "Name"}
-              </span>
-              <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src={
-                    user?.avatar_url ||
-                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
-                  }
-                />
-                <AvatarFallback>
-                  {user ? user.first_name[0] : "U"}
-                  {user ? user.last_name[0] : "N"}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
+        <div className="hidden xl:block">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-2 text-white">
+                <span className="text-sm font-medium">
+                  {user?.first_name || "User"} {user?.last_name || "Name"}
+                </span>
+                <Avatar className="h-8 w-8">
+                  <AvatarImage
+                    src={
+                      user?.avatar_url ||
+                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
+                    }
+                  />
+                  <AvatarFallback>
+                    {user ? user.first_name[0] : "U"}
+                    {user ? user.last_name[0] : "N"}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => router.push("/profile")}>
-              <User className="h-4 w-4 mr-2" />
-              Profile
-            </DropdownMenuItem>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
+                <User className="h-4 w-4 mr-2" />
+                Profile
+              </DropdownMenuItem>
 
-            <DropdownMenuSeparator />
+              <DropdownMenuSeparator />
 
-            <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );

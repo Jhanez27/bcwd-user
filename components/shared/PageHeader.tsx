@@ -12,14 +12,14 @@ export function PageHeader({ title, description, badge, className }: PageHeaderP
   return (
     <div
       className={cn(
-        'flex flex-1 min-w-0 items-start justify-between gap-4 pb-5',
+        'flex flex-col gap-3 pb-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4',
         'border-b border-border',
-        'animate-in fade-in slide-in-fr om-bottom-2 duration-300 ease-out',
+        'animate-in fade-in slide-in-from-bottom-2 duration-300 ease-out',
         className,
       )}
     >
       {/* ── Left block ── */}
-      <div className="flex items-start gap-4 min-w-0">
+      <div className="flex items-start gap-3 min-w-0">
 
         {/* Accent bar */}
         <div
@@ -33,10 +33,10 @@ export function PageHeader({ title, description, badge, className }: PageHeaderP
         />
 
         <div className="min-w-0">
-          {/* Eyebrow — subtle category label above the title */}
+          {/* Eyebrow */}
           <p
             className={cn(
-              'text-[11px] font-semibold tracking-[0.12em] uppercase',
+              'hidden sm:block text-[11px] font-semibold tracking-[0.12em] uppercase',
               'text-primary/70',
               'mb-1',
               'animate-in fade-in slide-in-from-left-3 duration-300 delay-75 ease-out',
@@ -48,7 +48,7 @@ export function PageHeader({ title, description, badge, className }: PageHeaderP
           {/* Title */}
           <h1
             className={cn(
-              'text-2xl font-bold leading-none tracking-[-0.02em]',  
+              'text-xl sm:text-2xl font-bold leading-none tracking-[-0.02em]',
               'bg-linear-to-r from-foreground via-foreground to-foreground/70',
               'bg-clip-text text-transparent',
               'animate-in fade-in slide-in-from-left-3 duration-300 delay-100 ease-out',
@@ -76,7 +76,7 @@ export function PageHeader({ title, description, badge, className }: PageHeaderP
       {badge && (
         <div
           className={cn(
-            'shrink-0 self-center',
+            'self-start sm:self-center shrink-0 pl-4 sm:pl-0',
             'animate-in fade-in slide-in-from-right-3 duration-300 delay-150 ease-out',
           )}
         >

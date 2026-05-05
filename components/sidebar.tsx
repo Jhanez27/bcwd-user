@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   Home,
   CreditCard,
@@ -9,9 +10,13 @@ import {
   FileText,
   Megaphone,
   Menu,
+  LogOut,
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
+import { getCurrentConsumer } from "@/supabase/consumer";
+import { createClient } from "@/utils/supabase/client";
 
 const menuItems = [
   { href: "/dashboard", label: "Home", icon: Home },
@@ -29,6 +34,28 @@ export function Sidebar({
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    getCurrentConsumer().then(setUser);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 1279px)").matches;
+    document.body.style.overflow = !collapsed && isMobile ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [collapsed]);
+
+  const closeSidebarOnMobile = () => {
+    if (window.matchMedia("(max-width: 1279px)").matches) setCollapsed(true);
+  };
 
   const isActive = (href: string) => {
     if (href === "/dashboard" && pathname === "/dashboard") return true;
