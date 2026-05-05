@@ -51,7 +51,10 @@ export function Header({
       .maybeSingle();
 
     const { data } = await query;
-    if (!data) { setHasUnread(false); return; }
+    if (!data) {
+      setHasUnread(false);
+      return;
+    }
 
     if (!lastSeen) {
       setHasUnread(true);
@@ -72,7 +75,9 @@ export function Header({
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "billing" },
-        () => { checkUnread(); }
+        () => {
+          checkUnread();
+        },
       )
       .subscribe();
 
@@ -96,18 +101,16 @@ export function Header({
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 z-40 h-16 px-5 border-b items-center flex bg-black/70",
+        "fixed top-0 right-0 z-40 h-16 px-5 border-b items-center flex bg-gradient-to-r from-blue-950 via-blue-900 to-blue-950",
         "transition-[left] duration-200 ease-in-out",
         collapsed ? "xl:left-15 left-0" : "xl:left-60 left-0",
-      )}
-    >
+      )}>
       <div className="flex items-center gap-2 flex-1">
         {/* Mobile toggle */}
         <button
           onClick={() => setCollapsed((c) => !c)}
           className="xl:hidden flex items-center justify-center w-9 h-9 rounded-md
-               hover:bg-white/10 transition"
-        >
+               hover:bg-white/10 transition">
           <Menu className="w-5 h-5 text-white" />
         </button>
 
@@ -122,8 +125,7 @@ export function Header({
           size="sm"
           className="relative gap-2 text-white hover:bg-white/10"
           onClick={handleBellClick}
-          aria-label="Notifications"
-        >
+          aria-label="Notifications">
           <Bell className="w-5 h-5" />
           {hasUnread && (
             <span className="absolute top-1 right-1 flex h-2.5 w-2.5">
