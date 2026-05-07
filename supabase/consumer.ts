@@ -20,13 +20,11 @@ export const getCurrentConsumer = async () => {
     .eq("consumer_uuid", user?.id)
     .maybeSingle();
   if (consumerError) throw consumerError;
-  console.log(consumer);
   return consumer;
 };
 
 export const verifyAccountDetails = async (data: SignUpFormValues) => {
   try {
-    console.log(data);
     const { data: consumer, error } = await supabase
       .from("consumer")
       .select(
