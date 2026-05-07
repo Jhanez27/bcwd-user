@@ -6,14 +6,14 @@ import { daysBetween } from "../utils";
 import { cn } from "@/lib/utils";
 
 export function StatusBanner({ billing }: { billing?: Billing }) {
-  if (!billing) return null;
+  // if (!billing) return null;
 
-  const isPaid = billing.status === "Paid";
-  const isOverdue = billing.status === "Overdue";
-  const days = billing.due_date ? daysBetween(billing.due_date) : null;
+  //const isPaid = billing.status === "Paid";
+  const isOverdue = billing?.status === "Overdue";
+  const days = billing?.due_date ? daysBetween(billing.due_date) : null;
   const dueSoon = days !== null && days >= 0 && days <= 7;
 
-  if (isPaid) {
+  if (!billing) {
     return (
       <Banner
         tone="success"
@@ -97,20 +97,24 @@ function Banner({
       className={cn(
         "flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl border p-4 sm:p-5",
         styles.wrap,
-      )}
-    >
+      )}>
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <div
           className={cn(
             "shrink-0 w-10 h-10 rounded-lg flex items-center justify-center",
             styles.icon,
-          )}
-        >
+          )}>
           {icon}
         </div>
         <div className="min-w-0">
           <p className={cn("text-sm font-bold", styles.title)}>{title}</p>
-          <p className={cn("text-xs sm:text-sm mt-0.5 leading-relaxed", styles.msg)}>{message}</p>
+          <p
+            className={cn(
+              "text-xs sm:text-sm mt-0.5 leading-relaxed",
+              styles.msg,
+            )}>
+            {message}
+          </p>
         </div>
       </div>
       {cta && (
@@ -119,8 +123,7 @@ function Banner({
           className={cn(
             "inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shrink-0 self-start sm:self-auto",
             styles.btn,
-          )}
-        >
+          )}>
           {cta.label}
           <ArrowRight className="w-4 h-4" />
         </Link>
