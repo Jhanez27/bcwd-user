@@ -67,8 +67,7 @@ export function Landing() {
                 <Link href="/contact">
                   <Button
                     size="lg"
-                    className="bg-white text-primary hover:bg-white/90"
-                  >
+                    className="bg-white text-primary hover:bg-white/90">
                     Contact Us
                   </Button>
                 </Link>
@@ -128,19 +127,15 @@ export function Landing() {
                 <div className=" rounded-lg p-6  bg-white/7 border border-white/20">
                   <h3 className="text-xl font-bold mb-6">Mission</h3>
                   <p className="text-white">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    The Baybay City Water District commits to provide adequate
+                    supply of quality water.
                   </p>
                 </div>
                 <div className=" rounded-lg p-6  bg-white/7 border border-white/20">
                   <h3 className="text-xl font-bold mb-6 text-white">Vision</h3>
                   <p className="text-white">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    To be an excellent and sustainable water service provider in
+                    region VIII with dignified and dedicated personnel.
                   </p>
                 </div>
               </div>
@@ -193,8 +188,7 @@ export function Landing() {
             <div className="flex gap-4">
               <a
                 href="https://www.facebook.com/BCWDistrict"
-                className="text-white/60 hover:text-white transition-colors"
-              >
+                className="text-white/60 hover:text-white transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
             </div>
