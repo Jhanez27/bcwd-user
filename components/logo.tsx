@@ -12,7 +12,7 @@ export function Logo() {
           className="h-10 w-auto"
         />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="font-bold text-sm leading-none text-background">
           BCWD
         </span>

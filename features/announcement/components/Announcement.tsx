@@ -1,127 +1,83 @@
-"use client";
-
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useAnnouncementData } from "../hooks/useAnnouncementData";
-import { cn } from "@/lib/utils";
+"use client"
+import { useMemo, useState } from 'react';
+import { Megaphone } from 'lucide-react';
+import { useAnnouncementData } from '../hooks/useAnnouncementData';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { AnnouncementGrid } from './AnnouncementGrid';
+import { FeaturedPost, FeaturedPostSkeleton } from './FeaturedPost';
+import { AnnouncementFilters, SortDirection } from './AnnouncementFilters';
+//import { mockAnnouncements, mockCategories } from '../mockData';
 
 export function Announcement() {
-  const { announcements } = useAnnouncementData();
+  const { announcements, categories, loading } = useAnnouncementData();
+  //const {announcements, categories, loading} = { announcements: mockAnnouncements, categories: mockCategories, loading: false };
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+
+  const categoryOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const a of announcements) {
+      const name = a.announcement_category.name;
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    return categories.map((c) => ({ name: c.name, count: counts.get(c.name) ?? 0 }));
+  }, [announcements, categories]);
+
+  const filtered = useMemo(() => {
+    const list = selectedCategory
+      ? announcements.filter((a) => a.announcement_category.name === selectedCategory)
+      : announcements;
+    return [...list].sort((a, b) => {
+      const da = new Date(a.date_posted).getTime();
+      const db = new Date(b.date_posted).getTime();
+      return sortDirection === 'desc' ? db - da : da - db;
+    });
+  }, [announcements, selectedCategory, sortDirection]);
+
+  const featured = filtered[0] ?? null;
+  const rest = filtered.slice(1);
 
   return (
-    <div className="space-y-6">
-      {/* HEADER */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Announcements
-        </h1>
-      </div>
+    <div className="space-y-5">
+      <PageHeader
+        title="Announcements"
+        description="Official notices and updates from Baybay City Water District"
+        badge={
+          !loading ? (
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-xs text-muted-foreground font-medium whitespace-nowrap">
+              <Megaphone className="w-3.5 h-3.5" />
+              {announcements.length} {announcements.length === 1 ? 'notice' : 'notices'}
+            </div>
+          ) : null
+        }
+      />
 
-      {/* ── IMPROVED BANNER SECTION ───────────────────────────── */}
-      <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-r from-blue-950 via-blue-900 to-blue-950">
-        {/* background glow */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute -top-20 -left-20 h-64 w-64 bg-cyan-500 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 h-64 w-64 bg-blue-500 rounded-full blur-3xl" />
+      <div className="grid gap-5 lg:gap-12 lg:grid-cols-[220px_minmax(0,1fr)] lg:pl-4 xl:pl-25">
+        <AnnouncementFilters
+          categories={categoryOptions}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          sortDirection={sortDirection}
+          onChangeSort={setSortDirection}
+          totalCount={announcements.length}
+        />
+
+        <div className="min-w-0 max-w-2xl w-full">
+          {loading ? (
+            <div className="space-y-4">
+              <FeaturedPostSkeleton />
+              <AnnouncementGrid announcements={[]} loading />
+            </div>
+          ) : filtered.length === 0 ? (
+            <AnnouncementGrid announcements={[]} />
+          ) : (
+            <div className="space-y-4">
+              {featured && <FeaturedPost announcement={featured} />}
+              {rest.length > 0 && <AnnouncementGrid announcements={rest} />}
+            </div>
+          )}
         </div>
-
-        <div className="relative h-64 flex items-center justify-center text-center px-4">
-          <div className="space-y-3">
-            {/* logo circle */}
-            <div className="mx-auto h-24 w-24 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
-              <span className="text-xl font-bold text-white">BCWD</span>
-            </div>
-
-            {/* text */}
-            <div>
-              <h2 className="text-2xl font-bold text-white">
-                Baybay City Water District
-              </h2>
-              <p className="text-sm text-blue-200">
-                Official Announcements & Updates
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
-
-      {/* SECTION TITLE */}
-      <h2 className="text-2xl font-bold text-foreground">Site announcements</h2>
-
-      {/* GRID */}
-      <div
-        className={cn(
-          "grid gap-6",
-          announcements.length > 1 ? "md:grid-cols-3" : "",
-        )}>
-        {announcements.map((announcement) => (
-          <Card
-            key={announcement.id}
-            className="border-border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-            <div className="relative h-86 w-full overflow-hidden">
-              <img
-                src={announcement.attachment_url}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover blur-md scale-110"
-              />
-              <img
-                src={announcement.attachment_url}
-                alt={announcement.title}
-                className="relative w-full h-full object-contain"
-              />
-            </div>
-
-            <CardHeader>
-              <h3 className="font-bold text-foreground">
-                {announcement.title}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {announcement.description}
-              </p>
-            </CardHeader>
-          </Card>
-        ))}
-      </div>
-
-      {/* FEATURED POST */}
-      <Card className="border-border mt-8">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="h-10 w-10 rounded-full bg-primary/20" />
-            <div>
-              <p className="font-bold text-foreground">
-                Baybay City Water District
-              </p>
-              <p className="text-xs text-muted-foreground">Official Page</p>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            <div className="h-24 bg-muted rounded-md" />
-            <div className="h-24 bg-muted rounded-md" />
-            <div className="h-24 bg-muted rounded-md relative">
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-md">
-                <p className="text-white font-bold">+3</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-lg text-foreground mb-2">
-              The Baybay City Water District (BCWD) conducted a visitation and
-              inspection...
-            </h3>
-
-            <div className="flex items-center gap-2 text-blue-500">
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-              <span className="text-sm font-medium">Facebook</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

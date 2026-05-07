@@ -131,9 +131,7 @@ export function Login() {
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 className="w-full h-11 text-base font-semibold rounded-lg shadow-md transition-all duration-200 hover:scale-[1.02]">
-                {form.formState.isSubmitting
-                  ? "Logging in..."
-                  : "Login as Customer"}
+                {form.formState.isSubmitting ? "Logging in..." : "Login"}
               </Button>
             </form>
 
