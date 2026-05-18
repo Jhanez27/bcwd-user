@@ -59,13 +59,6 @@ export function Profile() {
             )}
           </div>
         </div>
-        <Button
-          onClick={() => setDialogOpen(true)}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
-        >
-          <Pencil className="h-4 w-4" />
-          Edit Profile
-        </Button>
       </div>
 
       {/* Details Grid */}
@@ -80,11 +73,15 @@ export function Profile() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Username</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                Username
+              </p>
               {loading ? (
                 <Skeleton className="h-5 w-36" />
               ) : (
-                <p className="text-sm font-semibold text-foreground">@{username || "—"}</p>
+                <p className="text-sm font-semibold text-foreground">
+                  @{username || "—"}
+                </p>
               )}
             </div>
           </CardContent>
@@ -100,11 +97,15 @@ export function Profile() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Phone Number</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                Phone Number
+              </p>
               {loading ? (
                 <Skeleton className="h-5 w-40" />
               ) : (
-                <p className="text-sm font-semibold text-foreground">{phone || "—"}</p>
+                <p className="text-sm font-semibold text-foreground">
+                  {phone || "—"}
+                </p>
               )}
             </div>
           </CardContent>
@@ -121,27 +122,39 @@ export function Profile() {
           <CardContent>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Address</p>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Address
+                </p>
                 {loading ? (
                   <Skeleton className="h-5 w-40" />
                 ) : (
-                  <p className="text-sm font-semibold text-foreground">{address || "—"}</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {address || "—"}
+                  </p>
                 )}
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Municipal Zone</p>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Municipal Zone
+                </p>
                 {loading ? (
                   <Skeleton className="h-5 w-28" />
                 ) : (
-                  <p className="text-sm font-semibold text-foreground">{municipalZone || "—"}</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {municipalZone || "—"}
+                  </p>
                 )}
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Zone Number</p>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Zone Number
+                </p>
                 {loading ? (
                   <Skeleton className="h-5 w-20" />
                 ) : (
-                  <p className="text-sm font-semibold text-foreground">{zoneNumber || "—"}</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {zoneNumber || "—"}
+                  </p>
                 )}
               </div>
             </div>
